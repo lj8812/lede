@@ -11,10 +11,10 @@ on:
   push:
     branches: 
       - master
-  # schedule:
-  #   - cron: 0 20 * * *
-  # release:
-  #   types: [published]
+  schedule:
+    - cron: 0 20 * * *
+  release:
+    types: [published]
 
 jobs:
 
@@ -46,9 +46,22 @@ jobs:
           sudo -E apt-get clean
 
           df -h
+
+      - name: add plugin
+        run: |
+          cd package
+          mkdir openwrt-packages
+          cd openwrt-packages
+          git clone https://github.com/lj8812/luci-app-adguardhome.git package/luci-app-adguardhome
+          git clone https://github.com/fw876/helloworld.git package/luci-app-helloworld
+          git clone https://github.com/kenzok78/luci-theme-argonne.git package/luci-theme-argonne
+          git clone https://github.com/xiaorouji/openwrt-passwall.git package/openwrt-passwall
+          git clone -b luci https://github.com/xiaorouji/openwrt-passwall.git package/luci-app-passwall
+          git clone https://github.com/vernesong/OpenClash.git package/OpenClash
           
       - name: Update feeds
         run: |
+          sed -i 's/#src-git helloworld/src-git helloworld/g' ./feeds.conf.default
           ./scripts/feeds update -a
           ./scripts/feeds install -a
 
@@ -129,6 +142,7 @@ jobs:
           cat >> .config <<EOF
           CONFIG_TARGET_KERNEL_PARTSIZE=256
           CONFIG_TARGET_ROOTFS_PARTSIZE=512
+          CONFIG_TARGET_ROOTFS_TARGZ=y
           CONFIG_PACKAGE_luci-app-passwall=y
           CONFIG_PACKAGE_luci-app-ssr-plus=y
           CONFIG_PACKAGE_luci-app-adguardhome=y
