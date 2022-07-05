@@ -63,6 +63,9 @@ jobs:
         run: |
           sed -i 's/#src-git helloworld/src-git helloworld/g' ./feeds.conf.default
           ./scripts/feeds update -a
+          pushd feeds/packages/lang
+          rm -fr golang && svn co https://github.com/openwrt/packages/trunk/lang/golang
+          popd
           ./scripts/feeds install -a
 
       - name: Generate configuration file
