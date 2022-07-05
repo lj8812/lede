@@ -182,6 +182,7 @@ jobs:
           # CONFIG_PACKAGE_luci-app-accesscontrol is not set
           # CONFIG_PACKAGE_luci-app-adbyby-plus is not set
           # CONFIG_PACKAGE_luci-app-arpbind is not set
+          # CONFIG_PACKAGE_luci-app-autoreboot is not set
           EOF
           
           # 取消编译VMware镜像以及镜像填充 (不要删除被缩进的注释符号):
